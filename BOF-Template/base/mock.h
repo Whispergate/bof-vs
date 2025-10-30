@@ -4,7 +4,7 @@
 #include "../sleepmask.h"
 
 namespace bof {
-    const DWORD CsVersion = 0x041000;
+    const DWORD CsVersion = 0x041200;
 
     namespace profile {
         /**
@@ -276,7 +276,7 @@ namespace bof {
      * @param functionCall the pointer to the FUNCTION_CALL structure
      * @return A vector of OutputEntry objects
      */
-    std::vector<bof::output::OutputEntry> runMockedSleepMask(SLEEPMASK_FUNC sleepMaskFunc, PSLEEPMASK_INFO sleepMaskInfo, PFUNCTION_CALL functionCall);
+    std::vector<bof::output::OutputEntry> runMockedSleepMask(SLEEPMASK_FUNC sleepMaskFunc, PBEACON_INFO beaconInfo, PFUNCTION_CALL functionCall);
 
     /**
      * Setup a mock-up Beacon and execute the sleepmask function as Beacon Gate with the default stage block.
