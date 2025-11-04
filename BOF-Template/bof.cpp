@@ -41,10 +41,10 @@ extern "C" {
         }
     }
 
-    /*
-    void sleep_mask(PSLEEPMASK_INFO info, PFUNCTION_CALL funcCall) {
-    }
-    */
+    
+    /*void sleep_mask(PBEACON_INFO info, PFUNCTION_CALL funcCall) {
+        // BeaconGateWrapper(info, funcCall);
+    }*/
 }
 
 // Define a main function for the bebug build

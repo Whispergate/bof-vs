@@ -350,29 +350,24 @@ namespace bof {
         }
     }
 
-    std::vector<bof::output::OutputEntry> runMockedSleepMask(SLEEPMASK_FUNC sleepMaskFunc, PSLEEPMASK_INFO sleepMaskInfo, PFUNCTION_CALL functionCall) {
+    std::vector<bof::output::OutputEntry> runMockedSleepMask(SLEEPMASK_FUNC sleepMaskFunc, PBEACON_INFO beaconInfo, PFUNCTION_CALL functionCall) {
         // Reset the global output container
         bof::output::reset();
         // Execute the entrypoint
-        sleepMaskFunc(sleepMaskInfo, functionCall);
+        sleepMaskFunc(beaconInfo, functionCall);
         // Return the stored outputs
         return bof::output::getOutputs();
     }
 
     std::vector<bof::output::OutputEntry> runMockedSleepMask(SLEEPMASK_FUNC sleepMaskFunc, const bof::profile::Stage& stage, const bof::mock::MockSleepMaskConfig& config) {
         BEACON_INFO beaconInfo = bof::mock::setupMockBeacon(stage);
-        SLEEPMASK_INFO sleepmaskInfo = {
-            .version = bof::CsVersion,
-            .reason = DEFAULT_SLEEP,
-            .sleep_time = config.sleepTimeMs,
-            .beacon_info = beaconInfo,
-        };
-        bof::mock::resolveMockUpSleepmaskLocation(sleepmaskInfo.beacon_info);
+        FUNCTION_CALL functionCall = bof::mock::createFunctionCallStructure(Sleep, SLEEP, TRUE, 1, config.sleepTimeMs);
+        bof::mock::resolveMockUpSleepmaskLocation(beaconInfo);
         bof::mock::setBeaconInfo(beaconInfo);
 
         std::vector<bof::output::OutputEntry> output;
         do {
-            output = runMockedSleepMask(sleepMaskFunc, &sleepmaskInfo, NULL);
+            output = runMockedSleepMask(sleepMaskFunc, &beaconInfo, &functionCall);
         } while (config.runForever);
 
         return output;
@@ -393,15 +388,9 @@ namespace bof {
 
     std::vector<bof::output::OutputEntry> runMockedBeaconGate(SLEEPMASK_FUNC sleepMaskFunc, PFUNCTION_CALL functionCall, const bof::profile::Stage& stage) { 
         BEACON_INFO beaconInfo = bof::mock::setupMockBeacon(stage);
-        SLEEPMASK_INFO sleepmaskInfo = {
-            .version = bof::CsVersion,
-            .reason = BEACON_GATE,
-            .sleep_time = 0,
-            .beacon_info = beaconInfo,
-        };
-        bof::mock::resolveMockUpSleepmaskLocation(sleepmaskInfo.beacon_info);
+        bof::mock::resolveMockUpSleepmaskLocation(beaconInfo);
         bof::mock::setBeaconInfo(beaconInfo);
-        return runMockedSleepMask(sleepMaskFunc, &sleepmaskInfo, functionCall);
+        return runMockedSleepMask(sleepMaskFunc, &beaconInfo, functionCall);
     }
 
     std::vector<bof::output::OutputEntry> runMockedBeaconGate(SLEEPMASK_FUNC sleepMaskFunc, PFUNCTION_CALL functionCall) {
@@ -428,6 +417,11 @@ extern "C"
         vprintf(fmt, args);
         printf("\n");
         va_end(args);
+    }
+
+    BOOL BeaconDownload(const char* filename, const char* buffer, unsigned int length) {
+        std::cerr << "Not implemented: " << __FUNCTION__ << std::endl;
+        return FALSE;
     }
 
     void BeaconOutput(int type, const char *data, int len) {
