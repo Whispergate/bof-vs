@@ -16,20 +16,20 @@ https://github.com/user-attachments/assets/256fec31-bf25-4c10-9a10-0ab50751ca6d
 ### Prerequisites:
 
 * An x64 Windows 10/11 development machine (without a security solution)
-* Visual Studio Community/Pro/Enterprise 2022 (Desktop Development with C++ installed)
+* Visual Studio Community/Pro/Enterprise 2022/2026 (Desktop Development with C++ installed)
 * Python 3 for the BOF linter (optional)
 
 ### Template Installation
 
 Download the latest [release](https://github.com/Cobalt-Strike/bof-vs/releases/latest/download/bof-vs.zip),
 and copy the `bof-vs.zip` archive under the 
-`%USERPROFILE%\Documents\Visual Studio 2022\Templates\ProjectTemplates` folder.
+`%USERPROFILE%\Documents\<VS version>\Templates\ProjectTemplates` folder.
 The template is accessible through Visual Studio's new project dialog,
 where you can locate it by searching with the keyword `BOF`. Be certain
 to have `All languages` chosen as the language filter.
 
 If Visual Studio does not recognize the template, then reset the project template cache by
-deleting the following file: `%localappdata%\Microsoft\VisualStudio\<VS vesrion>\ProjectTemplatesCache_{<GUID>}\cache.bin`
+deleting the following file: `%localappdata%\Microsoft\VisualStudio\<VS version>\ProjectTemplatesCache_{<GUID>}\cache.bin`
 
 If you need a BOF-VS template for a previous version of Cobalt Strike, you can find it under the [tags](https://github.com/Cobalt-Strike/bof-vs/tags).
 

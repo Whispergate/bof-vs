@@ -2,9 +2,13 @@ CFLAGS=/c /GS- /std:c++20 /D_HAS_EXCEPTIONS=0 /GR-
 DEBUGCFLAGS=/Zi /MTd /D_DEBUG /EHsc /std:c++20
 PYTHON=python
 
-!IF "$(PROCESSOR_ARCHITECTURE)" != "x86" && "$(PROCESSOR_ARCHITECTURE)" != "AMD64"
-!ERROR Only x86 and AMD64 architectures are supported or the PROCESSOR_ARCHITECTURE environment variable is not set.
-!ELSEIF "$(PROCESSOR_ARCHITECTURE)" == "AMD64"
+!IFNDEF PLATFORM
+PLATFORM=$(PROCESSOR_ARCHITECTURE)
+!ENDIF
+
+!IF "$(PLATFORM)" != "x86" && "$(PLATFORM)" != "AMD64"
+!ERROR Only x86 and AMD64 architectures are supported or the PLATFORM environment variable is not set.
+!ELSEIF "$(PLATFORM)" == "AMD64"
 OUTDIR=..\x64\Release\ 
 IMDIR=x64\Release\ 
 DOUTDIR=..\x64\Debug\ 
@@ -20,7 +24,7 @@ OUTEXT=.x86.o
 
 
 all: *.cpp
-    @$(MAKE) /A $(patsubst %.c,%.obj, $(patsubst %.cpp, %.obj, $(patsubsti %, $(IMDIR)\%, $**)))
+    @$(MAKE) /A $(patsubst %.c,%.obj, $(patsubst %.cpp, %.obj, $(patsubsti %, $(IMDIR)\%, $**))) PLATFORM=$(PLATFORM)
 
     @if not exist "$(OUTDIR)" mkdir "$(OUTDIR)"
     copy "$(IMDIR)\*.obj" "$(OUTDIR)"
@@ -28,7 +32,7 @@ all: *.cpp
     ren "$(OUTDIR)*.obj" "*$(OUTEXT)"
 
 all-debug: *.cpp
-    @$(MAKE) /A $(patsubst %.c,%.exe, $(patsubst %.cpp, %.exe, $(patsubsti %, $(DOUTDIR)\%, $**)))
+    @$(MAKE) /A $(patsubst %.c,%.exe, $(patsubst %.cpp, %.exe, $(patsubsti %, $(DOUTDIR)\%, $**))) PLATFORM=$(PLATFORM)
 
 .cpp{$(IMDIR)}.obj:
     @if not exist "$(IMDIR)" mkdir "$(IMDIR)"
